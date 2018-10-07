@@ -1,0 +1,8 @@
+extends layout
+
+block content
+    .col-md-4.pb-4
+        h3.text-primary Our Users:
+        ul.list-group
+            for user in users
+                li.list-group-item= user
