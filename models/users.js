@@ -16,11 +16,11 @@ let UserSchema = new Schema({
   club: [{ type: ObjectId, ref: "Club" }]
 });
 
-UserSchema.virtual("name").get(() => {
+UserSchema.virtual("fullName").get(() => {
   return this.firstName + " " + this.lastName;
 });
 UserSchema.virtual("url").get(() => {
   return "/user/" + this._id;
 });
 
-module.exports = mongoose.model("User", UserSchema);
+let User = (module.exports = mongoose.model("User", UserSchema));
