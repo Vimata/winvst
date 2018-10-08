@@ -1,3 +1,4 @@
+const moment = require('moment');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -11,6 +12,10 @@ let ClubSchema = new Schema({
 
 ClubSchema.virtual('url').get(() => {
 	return '/club/' + this._id;
+});
+
+ClubSchema.virtual('created_formatted').get(() => {
+	return moment(this.created).format('D MMMM YYYY');
 });
 
 module.exports = mongoose.model('Club', ClubSchema);

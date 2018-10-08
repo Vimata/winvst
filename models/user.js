@@ -15,10 +15,23 @@ let UserSchema = new Schema({
 });
 
 UserSchema.virtual('fullName').get(() => {
-	return this.firstName + ' ' + this.lastName;
+	return `${this.firstName} ${this.lastName}`;
 });
+
 UserSchema.virtual('url').get(() => {
 	return '/user/' + this._id;
 });
+
+UserSchema.static.findUserByEmail = (email) => {
+	return User.findOne({ email: email }).exec();
+};
+
+UserSchema.methods.comparePassword = (passwordToCompare) => {
+	if (this.password === passwordToCompare) {
+		return true;
+	} else {
+		return false;
+	}
+};
 
 let User = (module.exports = mongoose.model('User', UserSchema));

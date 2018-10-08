@@ -1,6 +1,6 @@
 const Club = require('../models/club');
 const User = require('../models/user');
-const category = require('../models/category');
+const Category = require('../models/category');
 const async = require('async');
 
 exports.index = (req, res) => {
@@ -10,10 +10,10 @@ exports.index = (req, res) => {
 				Club.countDocuments({}, callback);
 			},
 			club_investment_count: (callback) => {
-				category.countDocuments({ name: 'Investment Club' }, callback);
+				Category.countDocuments({ name: 'Investment Club' }, callback);
 			},
 			club_stokvel_count: (callback) => {
-				category.countDocuments({ name: 'Stokvel' }, callback);
+				Category.countDocuments({ name: 'Stokvel' }, callback);
 			},
 			users_count: (callback) => {
 				User.countDocuments({}, callback);
@@ -27,7 +27,7 @@ exports.index = (req, res) => {
 
 // Display list of all Clubs.
 exports.club_list = (req, res, next) => {
-	Club.find({}, 'name created category').populate('category').exec((err, list_clubs) => {
+	Club.find({}).populate('category', 'name').exec((err, list_clubs) => {
 		if (err) {
 			return next(err);
 		}

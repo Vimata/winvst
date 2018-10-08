@@ -2,7 +2,13 @@ const User = require('../models/user');
 
 // Display list of all Users.
 exports.user_list = (req, res) => {
-	res.send('NOT IMPLEMENTED: User list');
+	User.find().exec((err, list_users) => {
+		if (err) {
+			return next(err);
+		}
+		// Successful, render view
+		res.render('user_list', { title: 'Users', user_list: list_users });
+	});
 };
 
 // Display detail page for a specific User.
