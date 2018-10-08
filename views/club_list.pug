@@ -3,11 +3,21 @@ extends layout
 block content
   h1= title
   
-  ul
-    each club in club_list
-      li 
-        a(href=club.url) #{club.name} 
-        |  - #{club.user.firstName}
+  .table-responsive 
+    table.table.table-striped
+      thead
+        tr 
+          th(scope=col) Clubs
+          th(scope=col) Created
+          th(scope=col) Category
+      tbody
+        each club in club_list
+          tr 
+            td 
+              a(href=club.url) #{club.name}
+            td #{club.created}
+            td #{club.category.name}
+            
 
-    else
-      li There are no clubs.
+        else
+            li There are no clubs.
