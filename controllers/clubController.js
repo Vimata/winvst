@@ -1,12 +1,41 @@
 const Club = require("../models/clubs");
+const User = require("../models/users");
+const Stream = require("../models/streams");
+const async = require("async");
 
-exports.index = function(req, res) {
-  res.send("NOT IMPLEMENTED: Site Home Page");
+exports.index = (req, res) => {
+  async.parallel(
+    {
+      club_count: callback => {
+        Club.countDocuments({}, callback);
+      },
+      club_investment_count: callback => {
+        Stream.countDocuments({ name: "Investment Club" }, callback);
+      },
+      club_stokvel_count: callback => {
+        Stream.countDocuments({ name: "Stokvel" }, callback);
+      },
+      users_count: callback => {
+        User.countDocuments({}, callback);
+      }
+    },
+    function(err, results) {
+      res.render("home", { title: "Dashboard", error: err, data: results });
+    }
+  );
 };
 
 // Display list of all Clubs.
-exports.club_list = function(req, res) {
-  res.send("NOT IMPLEMENTED: Club list");
+exports.club_list = (req, res, next) => {
+  Club.find({}, "name user")
+    .populate("user")
+    .exec((err, list_clubs) => {
+      if (err) {
+        return next(err);
+      }
+      //Successful, render view
+      res.render("club_list", { title: "Club List", club_list: list_clubs });
+    });
 };
 
 // Display detail page for a specific Club.

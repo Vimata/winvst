@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1= title
+  
+  ul
+    each club in club_list
+      li 
+        a(href=club.url) #{club.name} 
+        |  - #{club.user.firstName}
+
+    else
+      li There are no clubs.

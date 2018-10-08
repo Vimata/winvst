@@ -70,11 +70,11 @@ function streamCreate(name, cb) {
   });
 }
 
-function clubCreate(name, description, members, stream, cb) {
+function clubCreate(name, description, user, stream, cb) {
   let clubdetail = {
     name: name,
     description: description,
-    members: members,
+    user: user,
     stream: stream
   };
   if (description != false) clubdetail.description = description;
