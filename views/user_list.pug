@@ -8,13 +8,20 @@ block content
       thead
         tr
           th(scope=col) Name
+          th(scope=col) Member of
           th(scope=col) Joined
       tbody
         each user in user_list 
           tr
             td 
               a(href=user.url) #{user.firstName} #{user.lastName}
+            
+            td
+              - let clubs = user.club;
+              ul
+                each club, i in clubs.length ? clubs : ['There are no users']
+                  li 
+                    a(href=club.url) #{clubs[i].name}
             td #{user.joined_formatted}
-      
         else
           li There are no users.

@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const mongoDB = 'mongodb://vimata:15_Icarus@ds157538.mlab.com:57538/winvstapp';
 
@@ -20,6 +21,8 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+app.use(bodyParser.urlencoded({ extended: true }));
+//app.use(bodyParser.json);
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

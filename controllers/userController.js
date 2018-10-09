@@ -2,7 +2,7 @@ const User = require('../models/user');
 
 // Display list of all Users.
 exports.user_list = (req, res) => {
-	User.find().exec((err, list_users) => {
+	User.find().populate('club').exec((err, list_users) => {
 		console.log(list_users);
 		if (err) {
 			return next(err);

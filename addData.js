@@ -26,12 +26,34 @@ let users = [];
 let clubs = [];
 let categories = [];
 
-function userCreate(firstName, lastName, email, password, cb) {
+function clubCreate(name, description, category, cb) {
+	let clubdetail = {
+		name: name,
+		description: description,
+		category: category
+	};
+	if (description != false) clubdetail.description = description;
+
+	let club = new Club(clubdetail);
+
+	club.save(function(err) {
+		if (err) {
+			cb(err, null);
+			return;
+		}
+		console.log('New Club: ' + club);
+		clubs.push(club);
+		cb(null, club);
+	});
+}
+
+function userCreate(firstName, lastName, email, password, club, cb) {
 	userdetail = {
 		firstName: firstName,
 		lastName: lastName,
 		email: email,
-		password: password
+		password: password,
+		club: club
 	};
 
 	let user = new User(userdetail);
@@ -61,46 +83,87 @@ function categoryCreate(name, cb) {
 	});
 }
 
-function clubCreate(name, description, user, category, cb) {
-	let clubdetail = {
-		name: name,
-		description: description,
-		user: user,
-		category: category
-	};
-	if (description != false) clubdetail.description = description;
-
-	let club = new Club(clubdetail);
-
-	club.save(function(err) {
-		if (err) {
-			cb(err, null);
-			return;
-		}
-		console.log('New Club: ' + club);
-		clubs.push(club);
-		cb(null, club);
-	});
-}
-
-function createCategoriesUsers(cb) {
+function createClubs(cb) {
 	async.parallel(
 		[
 			function(callback) {
-				userCreate('Patrick', 'Rothfuss', 'patrick@me.com', 'password', callback);
+				clubCreate(
+					'Malabu Club',
+					'I have stolen princesses back from sleeping barrow kings. I burned down the town of Trebon. I have spent the night with Felurian and left with both my sanity and my life.',
+					categories[0],
+					callback
+				);
 			},
 			function(callback) {
-				userCreate('Ben', 'Bova', 'ben@mail.com', 'password', callback);
+				clubCreate(
+					'The Wise Club',
+					'Picking up the tale of Kvothe Kingkiller once again, we follow him into exile, into political intrigue, courtship, adventure, love and magic...',
+					categories[1],
+					callback
+				);
 			},
 			function(callback) {
-				userCreate('Isaac', 'Asimov', 'isaac@mlaid.com', 'password', callback);
+				clubCreate(
+					'The Slow Club',
+					'Deep below the University, there is a dark place. Few people know of it: a broken web of ancient passageways and abandoned rooms.',
+					categories[1],
+					callback
+				);
 			},
 			function(callback) {
-				userCreate('Bob', 'Billings', 'bob@mlaid.com', 'password', callback);
+				clubCreate(
+					'Apes and Angels Club',
+					'Humankind headed out to the stars not for conquest, nor exploration, nor even for curiosity. Humans went to the stars in a desperate crusade to save intelligent life wherever they found it.',
+					categories[0],
+					callback
+				);
 			},
 			function(callback) {
-				userCreate('Jim', 'Jones', 'jim@acca.com', 'password', callback);
+				clubCreate(
+					'Death Club',
+					"In Ben Bova's previous novel New Earth, Jordan Kell led the first human mission beyond the solar system.",
+					categories[1],
+					callback
+				);
 			},
+			function(callback) {
+				clubCreate('Test Club', 'Summary of test club 1', categories[1], callback);
+			},
+			function(callback) {
+				clubCreate('Test Club 2', 'Summary of test club 2', categories[0], callback);
+			}
+		],
+		cb
+	);
+}
+
+function createUsers(cb) {
+	async.parallel(
+		[
+			function(callback) {
+				userCreate('Patrick', 'Rothfuss', 'patrick@me.com', 'password', clubs[0], callback);
+			},
+			function(callback) {
+				userCreate('Ben', 'Bova', 'ben@mail.com', 'password', [ clubs[1], clubs[6] ], callback);
+			},
+			function(callback) {
+				userCreate('Isaac', 'Asimov', 'isaac@mlaid.com', 'password', [ clubs[2], clubs[5] ], callback);
+			},
+			function(callback) {
+				userCreate('Bob', 'Billings', 'bob@mlaid.com', 'password', clubs[3], callback);
+			},
+			function(callback) {
+				userCreate('Jim', 'Jones', 'jim@acca.com', 'password', clubs[4], callback);
+			}
+		],
+		// optional callback
+		cb
+	);
+}
+
+function createCategories(cb) {
+	async.parallel(
+		[
 			function(callback) {
 				categoryCreate('Stokvel', callback);
 			},
@@ -113,68 +176,9 @@ function createCategoriesUsers(cb) {
 	);
 }
 
-function createClubs(cb) {
-	async.parallel(
-		[
-			function(callback) {
-				clubCreate(
-					'Malabu Club',
-					'I have stolen princesses back from sleeping barrow kings. I burned down the town of Trebon. I have spent the night with Felurian and left with both my sanity and my life.',
-					users[0],
-					categories[0],
-					callback
-				);
-			},
-			function(callback) {
-				clubCreate(
-					'The Wise Club',
-					'Picking up the tale of Kvothe Kingkiller once again, we follow him into exile, into political intrigue, courtship, adventure, love and magic...',
-					[ users[0], users[3] ],
-					categories[1],
-					callback
-				);
-			},
-			function(callback) {
-				clubCreate(
-					'The Slow Club',
-					'Deep below the University, there is a dark place. Few people know of it: a broken web of ancient passageways and abandoned rooms.',
-					[ users[1], users[2] ],
-					categories[1],
-					callback
-				);
-			},
-			function(callback) {
-				clubCreate(
-					'Apes and Angels Club',
-					'Humankind headed out to the stars not for conquest, nor exploration, nor even for curiosity. Humans went to the stars in a desperate crusade to save intelligent life wherever they found it.',
-					[ users[2], users[3], users[0] ],
-					categories[0],
-					callback
-				);
-			},
-			function(callback) {
-				clubCreate(
-					'Death Club',
-					"In Ben Bova's previous novel New Earth, Jordan Kell led the first human mission beyond the solar system.",
-					[ users[1], users[2] ],
-					categories[1],
-					callback
-				);
-			},
-			function(callback) {
-				clubCreate('Test Club', 'Summary of test club 1', [ users[3], users[1] ], categories[1], callback);
-			},
-			function(callback) {
-				clubCreate('Test Club 2', 'Summary of test club 2', [ users[1], users[2] ], categories[0], callback);
-			}
-		],
-		// optional callback
-		cb
-	);
-}
 console.log(clubs[1]);
 async.series(
-	[ createCategoriesUsers, createClubs ],
+	[ createCategories, createClubs, createUsers ],
 	// Optional callback
 	function(err, results) {
 		if (err) {

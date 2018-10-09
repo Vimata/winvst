@@ -9,9 +9,9 @@ let UserSchema = new Schema({
 	password: {
 		type: String,
 		required: true,
-		unique: true,
 		min: [ 6, 'Password should have 6 characters' ]
 	},
+	club: [ { type: mongoose.Schema.Types.ObjectId, ref: 'Club' } ],
 	joined: { type: Date, default: Date.now }
 });
 

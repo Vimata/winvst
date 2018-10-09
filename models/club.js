@@ -3,10 +3,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let ClubSchema = new Schema({
-	_id: String,
 	name: { type: String, required: true, unique: true },
 	description: { type: String, max: 250 },
-	user: [ { type: mongoose.Schema.Types.ObjectId, ref: 'User' } ],
 	category: [ { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true } ],
 	created: { type: Date, default: Date.now }
 });
