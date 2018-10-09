@@ -27,18 +27,37 @@ exports.index = (req, res) => {
 
 // Display list of all Clubs.
 exports.club_list = (req, res, next) => {
-	Club.find({}).populate('category', 'name').exec((err, list_clubs) => {
+	Club.find({}).populate('category').populate('user').exec((err, list_clubs) => {
 		if (err) {
 			return next(err);
 		}
 		//Successful, render view
-		res.render('club_list', { title: 'Club List', club_list: list_clubs });
+		res.render('club_list', { title: 'Available Clubs', club_list: list_clubs });
 	});
 };
 
 // Display detail page for a specific Club.
-exports.club_detail = (req, res) => {
-	res.send('NOT IMPLEMENTED: Club detail: ' + req.params.id);
+exports.club_detail = (req, res, next) => {
+	async.parallel(
+		{
+			club: (callback) => {
+				Club.findById(req.params._id).populate('user').populate('category').exec(callback);
+			}
+		},
+		(err, results) => {
+			if (err) {
+				return next(err);
+			}
+			if (results.club == null) {
+				//No results
+				let err = new Error('Club not found.');
+				err.status = 404;
+				return next(err);
+			}
+			//Sucessful, render view
+			res.render('club_detail'), { title: 'Title', club: results.club };
+		}
+	);
 };
 
 // Display Club create form on GET.

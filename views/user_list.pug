@@ -3,19 +3,18 @@ extends layout
 block content
 
   h1= title
-    .table-responsive
-      table.table.table-striped
-        thead
+  .table-responsive
+    table.table.table-striped 
+      thead
+        tr
+          th(scope=col) Name
+          th(scope=col) Joined
+      tbody
+        each user in user_list 
           tr
-            th(scope=col) First Name
-            th(scope=col) Last Name
-            th(scope=col) Joined
-        tbody
-          each user in user_list 
-            tr
-              td 
-                a(href=user.url) #{user.fullName}
-              td #{user.joined}
-        
-          else
-            li There are no users.
+            td 
+              a(href=user.url) #{user.firstName} #{user.lastName}
+            td #{user.joined_formatted}
+      
+        else
+          li There are no users.

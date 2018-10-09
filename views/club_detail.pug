@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1 #{title}: #{club.name}
+
+  p #[strong User: ]
+    a(href=club.user.url) #{club.user.name}
+  p #[strong Created:] #{club.created_formatted}
+  p #[strong Description:] #{club.desciption}
+  
+  

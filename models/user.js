@@ -1,3 +1,4 @@
+const moment = require('moment');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -20,6 +21,10 @@ UserSchema.virtual('fullName').get(() => {
 
 UserSchema.virtual('url').get(() => {
 	return '/user/' + this._id;
+});
+
+UserSchema.virtual('joined_formatted').get(() => {
+	return moment(this.joined).format('D MMMM YYYY');
 });
 
 UserSchema.static.findUserByEmail = (email) => {

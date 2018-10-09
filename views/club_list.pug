@@ -10,14 +10,19 @@ block content
           th(scope=col) Clubs
           th(scope=col) Created
           th(scope=col) Category
+          th(scope=col) Members
       tbody
         each club in club_list
           tr 
             td 
               a(href=club.url) #{club.name}
             td #{club.created_formatted}
-            td #{club.category.name}
+            td #{club.category[0].name}
+            td
+              - let users = club.user;
+              ul
+                each user, i in users.length ? users : ['There are no users']
+                  li #{users[i].firstName} #{users[i].lastName} 
             
-
         else
             li There are no clubs.
